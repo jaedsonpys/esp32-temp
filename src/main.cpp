@@ -4,8 +4,8 @@
 #include <ESPmDNS.h>
 #include <DHT.h>
 
-char *ssid = "....";
-char *password = "....";
+char *ssid = "Jarmeson";
+char *password = "wet20110";
 
 const int dhtPin = 25;
 float temperature, humidity;
@@ -42,12 +42,17 @@ void loop() {
 
     if(client.connected()) {
         while(client.connected()) {
-            temperature = dht.readTemperature();
-            humidity = dht.readHumidity();
+            if(client.available() > 0) {
+                char signal = client.read();
 
-            String data = String(temperature) + "," + String(humidity);
-            client.println(data);
-            delay(2000);
+                if(signal == 's') {
+                    temperature = dht.readTemperature();
+                    humidity = dht.readHumidity();
+
+                    String data = String(temperature) + "," + String(humidity);
+                    client.println(data);
+                }
+            }
         }
         client.stop();
     }
