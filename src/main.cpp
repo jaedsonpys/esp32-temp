@@ -37,11 +37,12 @@ void setup() {
 
 void loop() {
     WiFiClient client = server.available();
+    float temperature, humidity;
 
     if(client.connected()) {
         while(client.connected()) {
-            float temperature = dht.readTemperature();
-            float humidity = dht.readHumidity();
+            temperature = dht.readTemperature();
+            humidity = dht.readHumidity();
 
             String data = String(temperature) + "," + String(humidity);
             client.println(data);
