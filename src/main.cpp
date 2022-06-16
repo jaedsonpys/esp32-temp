@@ -6,7 +6,9 @@
 
 char *ssid = "....";
 char *password = "....";
+
 const int dhtPin = 25;
+float temperature, humidity;
 
 DHT dht(dhtPin, DHT11);
 WiFiServer server(80);
@@ -37,7 +39,6 @@ void setup() {
 
 void loop() {
     WiFiClient client = server.available();
-    float temperature, humidity;
 
     if(client.connected()) {
         while(client.connected()) {
