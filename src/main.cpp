@@ -9,6 +9,7 @@ char *password = "....";
 const int dhtPin = 25;
 
 DHT dht(dhtPin, DHT11);
+WiFiServer server(80);
 
 void setup() {
     Serial.begin(9600);
@@ -28,10 +29,26 @@ void setup() {
         Serial.println("MDNS Started");
     }
 
+    server.begin();
+
     // dht sensor
     dht.begin();
 }
 
 void loop() {
-    // put your main code here, to run repeatedly:
+    WiFiClient client = server.available();
+
+    if(client.connected()) {
+        while(client.connected()) {
+            float temperature = dht.readTemperature();
+            float humidity = dht.readHumidity();
+
+            String data = String(temperature) + "," + String(humidity);
+            client.println(data);
+            delay(2000);
+        }
+        client.stop();
+    }
+
+    delay(1000);
 }
